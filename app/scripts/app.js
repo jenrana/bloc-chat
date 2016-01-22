@@ -1,4 +1,4 @@
-var blocChat = angular.module('blocChat', ['ui.router', 'firebase']);
+var blocChat = angular.module('blocChat', ['ui.router', 'firebase', 'ui.bootstrap']);
 
 blocChat.config(function($stateProvider, $locationProvider) {
         $locationProvider
@@ -9,7 +9,8 @@ blocChat.config(function($stateProvider, $locationProvider) {
         $stateProvider
          .state('landing', {
              url: '/',
-             templateUrl: '/templates/home.html'
+             templateUrl: '/templates/home.html',
+            controller: 'RoomCtrl'
          });
 });
 
@@ -19,9 +20,8 @@ blocChat.factory('Room', ['$firebaseArray', function($firebaseArray) {
 
     return {
         all: rooms
-    }
+    };
 }]);
-
 
 blocChat.controller('RoomCtrl', function($scope, Room) {
     $scope.rooms = Room.all;

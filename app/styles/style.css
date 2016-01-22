@@ -10,9 +10,25 @@ h1{
     font-size: 28px;
 }
 
+h2{
+    font-size: 24px;   
+}
+
 #sidebar{
     float: left;
-    width: 200px;
+    width: 350px;
     background-color: #ede7d3; /** beige **/
     padding: 20px;
+}
+#sidebar h2{
+    float: left;  
+    margin: 0;
+}
+#sidebar button{
+    float: right; 
+}
+#chat-room-list{
+    clear: both;
+    padding-top: 20px;
+    list-style: square;
 }
