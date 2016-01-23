@@ -20,7 +20,9 @@ blocChat.factory('Room', ['$firebaseArray', function($firebaseArray) {
     return {
         all: rooms,
         create: function(room){
-            return rooms.$add(room)
+            return rooms.$add({
+                name: room
+            });
         }
     };
 }]);
