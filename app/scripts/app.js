@@ -1,4 +1,16 @@
-var blocChat = angular.module('blocChat', ['ui.router', 'firebase', 'ui.bootstrap']);
+var blocChat = angular.module('blocChat', ['ui.router', 'firebase', 'ui.bootstrap','ngCookies']);
+
+blocChat.run(['$cookies', '$uibModal', function($cookies, $uibModal) {
+
+    if (!$cookies.blocChatCurrentUser || $cookies.blocChatCurrentUser === '' ) {
+        // Do something to allow users to set their username
+        $uibModal.open({
+            templateUrl: '/templates/username.html',
+            controller: 'UsernameCtrl'
+            });
+
+    }
+}]);
 
 blocChat.config(function($stateProvider, $locationProvider) {
         $locationProvider
@@ -84,4 +96,18 @@ blocChat.controller('ModalCtrl', function ($scope, $uibModalInstance, Room) {
         $uibModalInstance.dismiss('cancel');
     };
     
+});
+
+
+blocChat.controller('UsernameCtrl', function ($scope, $uibModalInstance, $cookieStore) {
+    $scope.addUsername= function () {
+        if ($scope.newUsername == null){
+               $scope.error = "Please enter a username";
+        }
+        else{
+            $cookieStore.put("Name", $scope.newUsername);
+            $uibModalInstance.close(); 
+        //console.log($cookieStore.get('Name'));
+        }
+    };
 });

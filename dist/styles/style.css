@@ -75,6 +75,11 @@ h3{
     padding: 0;
     font-size: 14px;
     font-weight: 600;
-    margin: 5px 0;
-    
+    margin: 5px 0;   
+}
+
+.error{
+    color: firebrick;
+    font-weight: 600;
+    font-size: 12px;
 }
