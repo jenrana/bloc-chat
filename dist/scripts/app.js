@@ -17,12 +17,18 @@ blocChat.config(function($stateProvider, $locationProvider) {
 blocChat.factory('Room', ['$firebaseArray', function($firebaseArray) {
     var firebaseRef = new Firebase("https://brilliant-heat-7733.firebaseio.com/");
     var rooms = $firebaseArray(firebaseRef.child('rooms'));
+    var messages = $firebaseArray(firebaseRef.child('messages'));
+    
     return {
         all: rooms,
         create: function(room){
             return rooms.$add({
                 name: room
             });
+            
+        },
+        messages: function(roomId, callback){
+            firebaseRef.child("messages").orderByChild("roomId").equalTo(roomId).on("value", callback);
         }
     };
 }]);
@@ -30,17 +36,41 @@ blocChat.factory('Room', ['$firebaseArray', function($firebaseArray) {
 blocChat.controller('RoomCtrl', function($scope, Room, $uibModal) {
     $scope.rooms = Room.all;
     $scope.animationsEnabled = true;
+    $scope.currentRoomName = "Choose a room to start chatting";
+    
+    $scope.messages = null;
+    
     $scope.open = function () {
     var modalInstance = $uibModal.open({
         animation: $scope.animationsEnabled,
         templateUrl: '/templates/newroom.html',
         controller: 'ModalCtrl'
-    });
-  };
+        });
+    };
 
-  $scope.toggleAnimation = function () {
-      $scope.animationsEnabled = !$scope.animationsEnabled;
-  };
+    $scope.toggleAnimation = function () {
+        $scope.animationsEnabled = !$scope.animationsEnabled;
+    };
+        // Room.sendMessage(roomId, message);
+        // Room.messages($scope.currentRoom.$id, function () {
+        //  messages.$add({ ... })
+        // });
+    $scope.setCurrentRoom = function(room){
+        $scope.currentRoom = room;
+        $scope.currentRoomName = room.name;
+        Room.messages(room.$id, function (messages) {
+            var value = messages.val(),
+                results = [];
+            
+            for (var i = 0; i < value.length; i++) {
+                if (value[i] !== undefined) { 
+                    results.push(value[i]);
+                }
+            }
+            
+            $scope.messages = results;
+        });
+    };
     
 });
  
