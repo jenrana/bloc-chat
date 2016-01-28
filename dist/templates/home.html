@@ -8,8 +8,14 @@
 <section id="chat-room">
     <h1>{{currentRoomName}}</h1>
     <ul id="message-list">
-        <li ng-repeat="message in messages"><span>{{message.sentAt}}</span><h4>{{message.username}}</h4>{{message.content}}</li>
+        <li ng-repeat="message in messages"><span>{{message.sentAt | fromNow }}</span><h4>{{message.username}}</h4>{{message.content}}</li>
     </ul>
 
+   <div id="send-message">
+      <form ng-submit="sendMessage(message)">
+         <input type="text" ng-model="newMessage">
+          <button type="submit" class="btn btn-sm btn-info">Send message</button>
+      </form>
+   </div>
 
 </section>

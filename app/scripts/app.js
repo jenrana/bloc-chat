@@ -3,7 +3,6 @@ var blocChat = angular.module('blocChat', ['ui.router', 'firebase', 'ui.bootstra
 blocChat.run(['$cookies', '$uibModal', function($cookies, $uibModal) {
 
     if (!$cookies.blocChatCurrentUser || $cookies.blocChatCurrentUser === '' ) {
-        // Do something to allow users to set their username
         $uibModal.open({
             templateUrl: '/templates/username.html',
             controller: 'UsernameCtrl'
@@ -45,7 +44,26 @@ blocChat.factory('Room', ['$firebaseArray', function($firebaseArray) {
     };
 }]);
 
-blocChat.controller('RoomCtrl', function($scope, Room, $uibModal) {
+blocChat.factory('Message', ['$firebaseArray', '$cookieStore', function($firebaseArray, $cookieStore) {
+
+  var firebaseRef = new Firebase("https://brilliant-heat-7733.firebaseio.com/");
+  var messages = $firebaseArray(firebaseRef.child('messages'));
+
+  return {
+    send: function(newMessage, roomId) {
+        return messages.$add({
+            content: newMessage,
+            username: $cookieStore.get("blocChatCurrentUser"),
+            sentAt: Firebase.ServerValue.TIMESTAMP,
+            roomId: roomId
+        });
+    }
+  }
+}]);
+
+
+
+blocChat.controller('RoomCtrl', function($scope, Room, $uibModal, Message, $firebaseArray) {
     $scope.rooms = Room.all;
     $scope.animationsEnabled = true;
     $scope.currentRoomName = "Choose a room to start chatting";
@@ -60,28 +78,30 @@ blocChat.controller('RoomCtrl', function($scope, Room, $uibModal) {
         });
     };
 
+    
     $scope.toggleAnimation = function () {
         $scope.animationsEnabled = !$scope.animationsEnabled;
     };
-        // Room.sendMessage(roomId, message);
-        // Room.messages($scope.currentRoom.$id, function () {
-        //  messages.$add({ ... })
-        // });
+    
+    
     $scope.setCurrentRoom = function(room){
         $scope.currentRoom = room;
         $scope.currentRoomName = room.name;
-        Room.messages(room.$id, function (messages) {
-            var value = messages.val(),
-                results = [];
-            
-            for (var i = 0; i < value.length; i++) {
-                if (value[i] !== undefined) { 
-                    results.push(value[i]);
-                }
-            }
-            
-            $scope.messages = results;
+        
+        var messages = Room.messages(room.$id, function (messages) {
+            $scope.messages = messages.val();
         });
+    };
+    
+    
+    // Room.sendMessage(roomId, message);
+    // Room.messages($scope.currentRoom.$id, function () {
+    //  messages.$add({ ... })
+    // });
+
+    $scope.sendMessage = function(room){
+        Message.send($scope.newMessage, $scope.currentRoom.$id);
+        $scope.newMessage = "";
     };
     
 });
@@ -105,7 +125,7 @@ blocChat.controller('UsernameCtrl', function ($scope, $uibModalInstance, $cookie
                $scope.error = "Please enter a username";
         }
         else{
-            $cookieStore.put("Name", $scope.newUsername);
+            $cookieStore.put("blocChatCurrentUser", $scope.newUsername);
             $uibModalInstance.close(); 
         //console.log($cookieStore.get('Name'));
         }

@@ -1,3 +1,6 @@
+html, body{
+  height:100%;
+}
 body{
     font-family: 'Open Sans', sans-serif;
 }
@@ -20,8 +23,9 @@ h3{
 #sidebar{
     float: left;
     width: 25%;
-    background-color: #ede7d3; /** beige **/
+    background-color: #ccc;
     padding: 20px 20px 50px;
+    height: 100%;
 }
 #sidebar h2{
     float: left;  
@@ -65,7 +69,11 @@ h3{
     padding: 0;
 }
 #message-list li{
-    padding: 0 20px 20px;
+    padding: 10px 20px;
+}
+
+#message-list li:nth-child(even) {
+    background-color: #eee;
 }
 #message-list span{
     display: inline-block;
@@ -82,4 +90,14 @@ h3{
     color: firebrick;
     font-weight: 600;
     font-size: 12px;
+}
+#send-message{
+    padding: 20px;   
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background-color:dimgrey;
+}
+#send-message input{
+    width: 50%;   
 }
