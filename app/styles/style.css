@@ -20,22 +20,23 @@ h3{
     font-size: 20px;
 }
 header{
-    border-bottom: 1px solid #ccc;   
     padding: 10px;
+    float:right;
 }
 #sidebar{
     float: left;
     width: 25%;
-    background-color: #ccc;
-    padding: 20px 20px 50px;
+    background-color: #cfe5e5;
     height: 100%;
 }
 #sidebar h2{
     float: left;  
+    padding: 20px 0 0 20px;
     margin: 0;
 }
 #sidebar button{
     float: right; 
+    margin: 20px 20px 0 0;
 }
 #chat-room-list{
     clear: both;
@@ -100,7 +101,7 @@ header{
 #send-message{
     padding: 20px;   
     position: absolute;
-    width: 100%;
+    width: 75%;
     bottom: 0;
     background-color:dimgrey;
 }

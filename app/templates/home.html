@@ -1,6 +1,3 @@
-<header>
-    <img src="/assets/images/blocchat.jpg" alt="blocChat"/>
-</header>
 <section id="sidebar">
     <h2>Chat Rooms</h2>
     <button type="button" class="btn btn-default btn-sm ng-click-active" ng-click="open()">+ Add a new room</button>
@@ -9,6 +6,9 @@
     </ul>
 </section>
 <section id="chat-room">
+<header>
+    <img src="/assets/images/blocchat.jpg" alt="blocChat"/>
+</header>
     <h1>{{currentRoomName}}</h1>
     <ul id="message-list">
         <li ng-repeat="message in messages"><span>{{message.sentAt | fromNow }}</span><h4>{{message.username}}</h4>{{message.content}}</li>
